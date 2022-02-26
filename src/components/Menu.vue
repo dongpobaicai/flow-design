@@ -17,7 +17,9 @@ export default {
       </div>
     </template>
     <div class="button-list">
-      <el-button v-for="btn in buttons" type="primary" :key="btn">{{ btn }}</el-button>
+      <el-button v-for="btn in buttons" type="primary" :key="btn">{{
+        btn
+      }}</el-button>
     </div>
   </el-card>
 </template>

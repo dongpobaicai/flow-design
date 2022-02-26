@@ -15,6 +15,7 @@ export default {
       id: "antv-x6-container",
     });
     design.initNode();
+    design.layout();
   },
 };
 </script>

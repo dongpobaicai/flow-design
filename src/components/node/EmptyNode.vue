@@ -1,8 +1,21 @@
 <template>
-  <el-popover v-if="isEdit && !viewMode" placement="top" trigger="click" ref="addBtn">
+  <el-popover
+    v-if="isEdit"
+    placement="top"
+    trigger="click"
+    ref="addBtn"
+  >
     <div>
-      <el-button size="mini" type="primary" :disabled="!data.isShowAddApprovalBtn" @click="addApprovalNode('ApprovalNode')">审核节点</el-button>
-      <el-button size="mini" type="primary" @click="addLaunchNode">发起人</el-button>
+      <el-button
+        size="mini"
+        type="primary"
+        :disabled="!data.isShowAddApprovalBtn"
+        @click="addApprovalNode('ApprovalNode')"
+        >审核节点</el-button
+      >
+      <el-button size="mini" type="primary" @click="addLaunchNode"
+        >发起人</el-button
+      >
     </div>
     <div slot="reference" class="x6-end-node">
       <i class="el-icon-circle-plus-outline"></i>
@@ -17,8 +30,10 @@
 export default {
   inject: ["getGraph", "getNode"],
   props: {
-    isEdit: {},
-    viewMode: {},
+    isEdit: {
+      type: Boolean,
+      default: true
+    }
   },
   data() {
     return {
@@ -37,7 +52,10 @@ export default {
     },
     addLaunchNode() {
       this.$refs.addBtn.$data.showPopper = false;
-      this.$parent.addLaunchNode({ node: this.getNode(), graph: this.getGraph() });
+      this.$parent.addLaunchNode({
+        node: this.getNode(),
+        graph: this.getGraph(),
+      });
     },
   },
 };

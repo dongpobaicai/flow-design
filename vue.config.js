@@ -5,6 +5,7 @@ function resolve(dir) {
 }
 
 const vueConfig = {
+  runtimeCompiler: true,
   chainWebpack: (config) => {
     config.resolve.alias.set("@$", resolve("src")).set("#$", resolve("types"));
     config.plugin("html").tap((args) => {

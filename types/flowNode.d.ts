@@ -9,12 +9,13 @@ export interface NodeConfig {
 
 export type DesignOptions = {
   id: string;
-}
+};
+export type EmptyProps = {} | null;
 
 export interface FlowDesignInstance {
-  public graph: Object;
-  public initNode: () => void;
-  public layout: () => void;
-  public importJson: () => void;
-  public exportJson: () => void;
+  graph: Object;
+  initNode: () => void;
+  layout: () => void;
+  importJson: () => void;
+  exportJson: () => void;
 }

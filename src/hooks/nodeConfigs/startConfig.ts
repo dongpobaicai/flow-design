@@ -1,19 +1,19 @@
 import { Graph, Node } from "@antv/x6";
 
-import { NodeConfig } from "#/flowNode";
 import { PORTS_OPTIONS } from "./common";
-import EmptyNode from "@/components/node/EmptyNode.vue";
 
+import { NodeConfig } from "#/flowNode";
+import StartNode from "@/components/node/StartNode.vue";
 import { createNode, createEdge } from "@/hooks/nodeUtil";
 import type FlowDesign from "@/hooks/flowDesign";
 
-export default function getEmptyConfig(design: FlowDesign): NodeConfig {
+export default function getStartConfig(design: FlowDesign): NodeConfig {
   return {
-    name: "emptyNode",
+    name: "startNode",
     entity: {
-      template: "<empty-node></empty-node>",
+      template: `<start-node></start-node>`,
       components: {
-        EmptyNode,
+        StartNode,
       },
       methods: {
         addLaunchNode({ graph, node }: { graph: Graph; node: Node }) {
@@ -26,18 +26,7 @@ export default function getEmptyConfig(design: FlowDesign): NodeConfig {
           }
           const member = createNode("launch", graph);
           graph.removeEdge(edges[0]);
-          const cells = [
-            member,
-            createEdge({ source: node, target: member, zIndex: edges[0].zIndex }, graph),
-            createEdge(
-              {
-                source: member,
-                target: lastNode[0],
-                zIndex: edges[0].zIndex,
-              },
-              graph
-            ),
-          ];
+          const cells = [member, createEdge({ source: node, target: member }, graph), createEdge({ source: member, target: lastNode[0] }, graph)];
           graph.addCell(cells);
           graph.freeze();
           design.layout();
@@ -63,7 +52,18 @@ export default function getEmptyConfig(design: FlowDesign): NodeConfig {
               const lastLastNode = graph.getNeighbors(lastNode[0], {
                 outgoing: true,
               });
-              cells = [member, createEdge({ source: node, target: member }, graph), createEdge({ source: member, target: lastLastNode[0] }, graph)];
+              const emptyNodeId = node.data.emptyNodeId;
+              cells = [
+                member,
+                createEdge({ source: node, target: member }, graph),
+                createEdge(
+                  {
+                    source: member,
+                    target: graph.getCellById(emptyNodeId) || lastLastNode[0],
+                  },
+                  graph
+                ),
+              ];
             } else {
               // 增加2个条件节点，1个空节点，删除原来的线，
               // 增加空节点到下个节点的线，增加条件节点到空节点的线，增加上个节点到条件节点的线
@@ -110,7 +110,6 @@ export default function getEmptyConfig(design: FlowDesign): NodeConfig {
               ];
               // 把空节点绑定到操作当前的node节点中去，并把node节点存到list中，用途：每当删除条件节点，需要去遍历list，查看其下面还有没有条件节点，如果没有的话则需要把node下的空节点也删除，并且维持原来的绑定关系，
               node.data.emptyNodeId = emptyNodeItance.id;
-              // that.conditionFuNodeObj[node.id] = node;
             }
           } else {
             if (edges.length > 1) {
@@ -145,20 +144,36 @@ export default function getEmptyConfig(design: FlowDesign): NodeConfig {
           graph.addCell(cells);
           design.layout();
         },
+        removeNode({ graph, node }: { graph: Graph; node: Node }) {
+          graph.freeze();
+          const inNodes = graph.getNeighbors(node, {
+            incoming: true,
+          });
+          const outNodes = graph.getNeighbors(node, {
+            outgoing: true,
+          });
+          if (!(inNodes && inNodes[0])) {
+            return false;
+          }
+          const edges = graph.getOutgoingEdges(inNodes[0]);
+          if (edges && edges.length === 1) {
+            // 删除最后一条边的时候，自动连接父节点和子节点
+            graph.addCell([createEdge({ source: inNodes[0], target: outNodes[0] }, graph)]);
+          }
+          //  需要把连接到node的所有线，改成连接到node的下面这个
+          graph.removeNode(node);
+          design.layout();
+        },
       },
     },
     force: true,
   };
 }
-
-export const emptyOptions = {
+export const startOptions = {
   ports: { ...PORTS_OPTIONS },
   shape: "vue-shape",
-  data: {
-    name: "空节点",
-    isShowAddApprovalBtn: true,
-  },
+  data: {},
   width: 100,
-  height: 25,
-  component: "emptyNode",
+  height: 50,
+  component: "startNode",
 };
