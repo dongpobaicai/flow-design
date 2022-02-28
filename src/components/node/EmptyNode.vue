@@ -10,7 +10,7 @@
         size="mini"
         type="primary"
         :disabled="!data.isShowAddApprovalBtn"
-        @click="addApprovalNode('ApprovalNode')"
+        @click="addApprovalNode('approvalNode')"
         >审核节点</el-button
       >
       <el-button size="mini" type="primary" @click="addLaunchNode"

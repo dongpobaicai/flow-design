@@ -3,6 +3,8 @@ import { NodeConfig } from "#/flowNode";
 
 import { emptyOptions } from "./nodeConfigs/emptyConfig";
 import { startOptions } from "./nodeConfigs/startConfig";
+import { endOptions } from "./nodeConfigs/endConfig";
+import { approvalOptions } from "./nodeConfigs/approvalConfig";
 
 type EdgeOption = {
   source: Cell;
@@ -16,6 +18,12 @@ export function registerNode(options: NodeConfig): void {
   Graph.registerVueComponent(options.name, options.entity, options.force);
 }
 
+/**
+ * 获取节点配置项
+ * @param key
+ * @param data
+ * @returns
+ */
 function getNodeOptions(key: string, data: Record<string, unknown> = {}) {
   let options: Node.Metadata = {};
   switch (key) {
@@ -24,6 +32,12 @@ function getNodeOptions(key: string, data: Record<string, unknown> = {}) {
       break;
     case "startNode":
       options = startOptions;
+      break;
+    case "endNode":
+      options = endOptions;
+      break;
+    case "approvalNode":
+      options = approvalOptions;
       break;
     case "launch":
       options = startOptions;

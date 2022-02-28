@@ -7,5 +7,8 @@
 
 ![界面效果](https://dongpobaicai.github.io/vuepress-githubpages/flow.png)
 
+
+## 功能
+
 - [+]添加开始节点，发起人
 - []审核节点

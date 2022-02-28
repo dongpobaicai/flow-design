@@ -5,6 +5,8 @@ import dagre from "dagre";
 import { registerNode, addNode, addEdge } from "./nodeUtil";
 import getEmptyConfig from "./nodeConfigs/emptyConfig";
 import getStartConfig from './nodeConfigs/startConfig'
+import getEndConfig from './nodeConfigs/endConfig'
+import getApprovalConfig from './nodeConfigs/approvalConfig'
 
 import { DesignOptions } from "#/flowNode";
 
@@ -100,6 +102,8 @@ export default class FlowDesign {
   private setGlobalNode() {
     // 注册开始节点
     registerNode(getStartConfig(this));
+    registerNode(getEndConfig(this));
+    registerNode(getApprovalConfig(this));
     // 注册空节点
     registerNode(getEmptyConfig(this));
   }
@@ -129,7 +133,9 @@ export default class FlowDesign {
       isFirstLaunchNode: true, // 用于判断是否是第一个发起人节点，
       name: "发起人",
     });
+    const endNode = addNode("endNode", this.graph as Graph)
     addEdge({ source: startNode, target: selfNode }, this.graph as Graph);
+    addEdge({ source: selfNode, target: endNode }, this.graph as Graph);
   }
 
   /**

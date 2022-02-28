@@ -5,8 +5,8 @@
     <template v-if="isEdit">
       <el-popover placement="top" trigger="click" ref="addBtn">
         <div>
-          <el-button size="mini" type="primary" :disabled="!data.isShowAddApprovalBtn" @click="addApprovalNode('ApprovalNode')">审核节点</el-button>
-          <el-button size="mini" type="primary" :disabled="!data.isShowConditionBtn" @click="addApprovalNode('ConditionNode')">条件</el-button>
+          <el-button size="mini" type="primary" :disabled="!data.isShowAddApprovalBtn" @click="addApprovalNode('approvalNode')">审核节点</el-button>
+          <el-button size="mini" type="primary" :disabled="!data.isShowConditionBtn" @click="addApprovalNode('conditionNode')">条件</el-button>
           <el-button size="mini" type="primary" @click="addLaunchNode">发起人</el-button>
         </div>
 
