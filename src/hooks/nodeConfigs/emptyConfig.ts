@@ -42,7 +42,7 @@ export default function getEmptyConfig(design: FlowDesign): NodeConfig {
           graph.freeze();
           design.layout();
         },
-        addApprovalNode({ key, graph, node }: { key: string; graph: Graph; node: Node }) {
+        addApprovalNode({ key, graph, node }: { key: string; graph: Graph; node: any }) {
           const lastNode = graph.getNeighbors(node, {
             outgoing: true,
           });
@@ -56,7 +56,7 @@ export default function getEmptyConfig(design: FlowDesign): NodeConfig {
           // -如果创建的是分支节点需要判断，node下是否有分支节点，
           // --没有分支节点=》需要创建两条分支节点，
           // --有分支节点=》则需要创建一条分支节点
-          if (key == "ConditionNode") {
+          if (key == "conditionNode") {
             // @ts-ignore: Unreachable code error
             if (lastNode[0].component == "conditionNode") {
               // 并行添加条件
@@ -110,7 +110,7 @@ export default function getEmptyConfig(design: FlowDesign): NodeConfig {
               ];
               // 把空节点绑定到操作当前的node节点中去，并把node节点存到list中，用途：每当删除条件节点，需要去遍历list，查看其下面还有没有条件节点，如果没有的话则需要把node下的空节点也删除，并且维持原来的绑定关系，
               node.data.emptyNodeId = emptyNodeItance.id;
-              // that.conditionFuNodeObj[node.id] = node;
+              design.conditionFuNodeObj[node.id] = node;
             }
           } else {
             if (edges.length > 1) {

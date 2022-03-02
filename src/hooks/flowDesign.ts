@@ -7,6 +7,7 @@ import getEmptyConfig from "./nodeConfigs/emptyConfig";
 import getStartConfig from './nodeConfigs/startConfig'
 import getEndConfig from './nodeConfigs/endConfig'
 import getApprovalConfig from './nodeConfigs/approvalConfig'
+import getConditionConfig from './nodeConfigs/conditionConfig'
 
 import { DesignOptions } from "#/flowNode";
 
@@ -20,9 +21,11 @@ const COLOR_COLLECTION = {
  */
 export default class FlowDesign {
   public graph: Record<string, unknown>;
+  public conditionFuNodeObj: Record<string, Node>;
 
   constructor(options: DesignOptions) {
     this.graph = this.initGraph(options.id);
+    this.conditionFuNodeObj = {}
   }
 
   private initGraph(id: string) {
@@ -104,6 +107,7 @@ export default class FlowDesign {
     registerNode(getStartConfig(this));
     registerNode(getEndConfig(this));
     registerNode(getApprovalConfig(this));
+    registerNode(getConditionConfig(this));
     // 注册空节点
     registerNode(getEmptyConfig(this));
   }

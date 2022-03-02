@@ -5,12 +5,14 @@ import { emptyOptions } from "./nodeConfigs/emptyConfig";
 import { startOptions } from "./nodeConfigs/startConfig";
 import { endOptions } from "./nodeConfigs/endConfig";
 import { approvalOptions } from "./nodeConfigs/approvalConfig";
+import { conditionOptions } from "./nodeConfigs/conditionConfig";
 
 type EdgeOption = {
   source: Cell;
   target: Cell;
   zIndex?: number | string;
 };
+let conditionIndex = 1
 /**
  * 注册结点
  */
@@ -39,9 +41,15 @@ function getNodeOptions(key: string, data: Record<string, unknown> = {}) {
     case "approvalNode":
       options = approvalOptions;
       break;
+    case "conditionNode":
+      options = conditionOptions;
+      data = {
+        name: "条件节点" + conditionIndex++,
+      }
+      break;
     case "launch":
       options = startOptions;
-      options.data = {
+      data = {
         isShowAddApprovalBtn: true,
         isShowConditionBtn: true,
         name: "发起人",

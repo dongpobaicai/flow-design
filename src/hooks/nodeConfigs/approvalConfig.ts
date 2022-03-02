@@ -38,7 +38,7 @@ export default function getApprovalConfig(design: FlowDesign): NodeConfig {
           // -如果创建的是分支节点需要判断，node下是否有分支节点，
           // --没有分支节点=》需要创建两条分支节点，
           // --有分支节点=》则需要创建一条分支节点
-          if (key == "ConditionNode") {
+          if (key == "conditionNode") {
             if (lastNode[0].component == "conditionNode") {
               // 并行添加条件
               const lastLastNode = graph.getNeighbors(lastNode[0], {
@@ -51,7 +51,7 @@ export default function getApprovalConfig(design: FlowDesign): NodeConfig {
               // 增加空节点到下个节点的线，增加条件节点到空节点的线，增加上个节点到条件节点的线
               graph.removeEdge(edges[0]);
               const member2 = createNode(key, graph);
-              const emptyNodeItance = createNode("EmptyNode", graph);
+              const emptyNodeItance = createNode("emptyNode", graph);
               cells = [
                 emptyNodeItance,
                 member,
@@ -64,6 +64,7 @@ export default function getApprovalConfig(design: FlowDesign): NodeConfig {
               ];
               // 把空节点绑定到操作当前的node节点中去，并把node节点存到list中，用途：每当删除条件节点，需要去遍历list，查看其下面还有没有条件节点，如果没有的话则需要把node下的空节点也删除，并且维持原来的绑定关系，
               node.data.emptyNodeId = emptyNodeItance.id;
+              design.conditionFuNodeObj[node.id] = node;
             }
           } else {
             if (edges.length > 1) {
@@ -79,7 +80,7 @@ export default function getApprovalConfig(design: FlowDesign): NodeConfig {
               });
             } else {
               graph.removeEdge(edges[0]);
-              cells = [member, createEdge({ source: node, target: member, zIndex: edges[0].zIndex }, graph), createEdge({ source: node, target: lastNode[0], zIndex: edges[0].zIndex }, graph)];
+              cells = [member, createEdge({ source: node, target: member, zIndex: edges[0].zIndex }, graph), createEdge({ source: member, target: lastNode[0], zIndex: edges[0].zIndex }, graph)];
             }
           }
           // 1.oldnode连接的end节点=》需要把连到end节点断开，然后newnode连接到end上
@@ -129,7 +130,7 @@ export default function getApprovalConfig(design: FlowDesign): NodeConfig {
               graph.addCell(cells);
             } else if (inEdges.length > 1 && outEdges.length > 1) {
               // 创建一个空节点，连接上下条件
-              const member = createNode("EmptyNode", graph);
+              const member = createNode("emptyNode", graph);
               console.log("member");
               cells.push(member);
               inEdges.forEach((inEdge) => {
